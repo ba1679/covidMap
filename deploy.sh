@@ -13,7 +13,7 @@ git add -A
 git commit -m 'deploy'
 
 # 將 dist資料夾中的內容推送至遠端的 gh-pages分支中，並強制無條件將舊有的內容取代成目前的內容（指令 git push -f)
-git push -f https://github.com/ba1679/vueCountrySide.git master:gh-pages
+git push -f https://github.com/ba1679/covidMap.git master:gh-pages
 cd -
 
 # 執行指令，在終端機輸入 deploy.sh
