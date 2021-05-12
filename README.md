@@ -1,19 +1,4 @@
-# covid19
+# covid19 全球疫情地圖與資訊
 
-## Project setup
-```
-npm install
-```
+## Demo : https://ba1679.github.io/covidMap/index.html#/
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
