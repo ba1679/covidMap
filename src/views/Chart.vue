@@ -22,7 +22,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-6 col-12">
+        <div class="col-lg-6 col-12 mb-3">
           <div class="card">
             <div class="card-header">今日確診病例排名</div>
             <div class="card-body">
