@@ -14,7 +14,7 @@
     </section>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-12 mb-3">
           <div class="card">
             <div class="card-header">累積確診病例排名</div>
             <div class="card-body">
@@ -22,7 +22,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-12">
           <div class="card">
             <div class="card-header">今日確診病例排名</div>
             <div class="card-body">
@@ -74,20 +74,6 @@ export default {
           console.log(err);
         });
     },
-    getYesterdayStatus() {
-      const vm = this;
-      const url = 'https://corona.lmao.ninja/v3/covid-19/all?yesterday=yesterday';
-      this.$http
-        .get(url)
-        .then((res) => {
-          console.log(res.data);
-          console.log(new Date(res.data.updated));
-          // vm.globalStatus = res.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     getAllCountries() {
       const vm = this;
       vm.isLoading = true;
@@ -122,10 +108,17 @@ export default {
         color: {
           pattern: ['#2C3E50']
         },
+        padding: {
+          bottom: 30
+        },
         axis: {
           x: {
             type: 'category',
-            categories: countryData
+            categories: countryData,
+            padding: {
+              left: 0,
+              right: 0
+            }
           }
         }
       });
@@ -148,10 +141,17 @@ export default {
         color: {
           pattern: ['#42B983']
         },
+        padding: {
+          bottom: 30
+        },
         axis: {
           x: {
             type: 'category',
-            categories: countryData
+            categories: countryData,
+            padding: {
+              left: 0,
+              right: 0
+            }
           }
         }
       });
@@ -160,7 +160,6 @@ export default {
   mounted() {
     this.getAllStatus();
     this.getAllCountries();
-    // this.getYesterdayStatus();
   }
 };
 </script>

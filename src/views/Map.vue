@@ -130,8 +130,10 @@ export default {
       continentData.forEach((item) => {
         let { lat, long } = item.countryInfo;
         let updateTime = new Date(item.updated).toLocaleString();
-        L.marker([lat, long]).addTo(osmMap).bindPopup(`
-
+        let marker = L.marker([lat, long])
+          .addTo(osmMap)
+          .bindPopup(
+            `
         <strong class="h6">${item.country}</strong>
         <br>
             今日新增病例: <strong>${item.todayCases}</strong>人 <br>
@@ -139,7 +141,8 @@ export default {
             累積病例: ${item.cases}人<br>
             累積死亡: ${item.deaths} 人<br>
 
-          <small>更新時間: ${updateTime}</small>`);
+          <small>更新時間: ${updateTime}</small>`
+          );
       });
       // 亞洲定位在台灣，其他就定位在第一個國家
       if (continentData[0].continent !== 'Asia') {
