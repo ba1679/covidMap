@@ -131,8 +131,7 @@ export default {
       });
       continentData.forEach((item) => {
         let { lat, long } = item.countryInfo;
-        let updateTime = new Date(item.updated).toLocaleString();
-        let marker = L.marker([lat, long])
+        L.marker([lat, long])
           .addTo(osmMap)
           .bindPopup(
             `
@@ -143,9 +142,8 @@ export default {
             累積病例: ${item.cases}人<br>
             累積死亡: ${item.deaths} 人<br>
 
-          <small>更新時間: ${updateTime}</small>`
-          )
-          .openPopup();
+          <small>更新時間: ${this.timeString}</small>`
+          );
       });
       // 亞洲定位在台灣，其他就定位在第一個國家
       if (continentData[0].continent !== 'Asia') {
@@ -175,6 +173,20 @@ export default {
     // 重新定位地圖
     panTo(lat, long) {
       osmMap.panTo([lat, long]);
+      L.marker([lat, long])
+        .addTo(osmMap)
+        .bindPopup(
+          `
+        <strong class="h6">${this.dataFilter.country}</strong>
+        <br>
+            今日新增病例: <strong>${this.dataFilter.todayCases}</strong>人 <br>
+            目前活躍病例: ${this.dataFilter.active} 人<br>
+            累積病例: ${this.dataFilter.cases}人<br>
+            累積死亡: ${this.dataFilter.deaths} 人<br>
+             <small>更新時間: ${this.timeString}</small>
+         `
+        )
+        .openPopup();
     }
   },
   mounted() {
