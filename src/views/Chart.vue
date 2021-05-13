@@ -3,20 +3,47 @@
     <loading :active.sync="isLoading"></loading>
     <section class="container">
       <div class="globalStatus">
-        更新日期: {{ timeString }} (台灣時間)
-        <ul>
-          <li>今日新增確診人數: {{ globalStatus.todayCases | ThousandsComma }}人</li>
-          <li>今日新增死亡人數: {{ globalStatus.todayDeaths | ThousandsComma }}人</li>
-          <li>截至目前死亡人數: {{ globalStatus.deaths | ThousandsComma }}人</li>
-          <li>全球總確診人數: {{ globalStatus.cases | ThousandsComma }}人</li>
-        </ul>
+        <div class="h3">
+          全球疫情概況 :
+        </div>
+        <small class="text-muted">最後更新時間: {{ timeString }} (台灣時間)</small>
+        <div class="row my-3">
+          <div class="col-lg-3 col-md-6 mb-2">
+            <div class="card text-center py-2 h-100">
+              <i class="fas fa-user-plus fa-2x"></i>
+              今日新增確診人數:
+              <div class="h4">{{ globalStatus.todayCases | ThousandsComma }}人</div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-2">
+            <div class="card text-center py-2 h-100">
+              <i class="fas fa-sad-tear fa-2x"></i>
+              今日新增死亡人數:
+              <div class="h4">{{ globalStatus.todayDeaths | ThousandsComma }}人</div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-2">
+            <div class="card text-center py-2 h-100">
+              <i class="fas fa-bible fa-2x"></i>
+              截至目前死亡人數:
+              <div class="h4">{{ globalStatus.deaths | ThousandsComma }}人</div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-2">
+            <div class="card text-center py-2 h-100">
+              <i class="fas fa-globe-americas fa-2x"></i>
+              全球總確診人數:
+              <div class="h4">{{ globalStatus.cases | ThousandsComma }}人</div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
     <div class="container-fluid">
       <div class="row">
         <div class="col-lg-6 col-12 mb-3">
           <div class="card">
-            <div class="card-header">累積確診病例排名</div>
+            <div class="card-header d-flex">累積確診病例排名<small class="ml-auto">(以百萬為單位)</small></div>
             <div class="card-body">
               <div id="totalChart"></div>
             </div>
@@ -24,7 +51,7 @@
         </div>
         <div class="col-lg-6 col-12 mb-3">
           <div class="card">
-            <div class="card-header">今日確診病例排名</div>
+            <div class="card-header d-flex">今日確診病例排名<small class="ml-auto">(以千為單位)</small></div>
             <div class="card-body">
               <div id="todayChart"></div>
             </div>
@@ -91,18 +118,22 @@ export default {
         });
     },
     renderTotalChart() {
-      let chartData = ['總確診人數'];
+      let chartData = [];
       let countryData = [];
       this.sortTotalCases.forEach((item) => {
         countryData.push(item.country);
         chartData.push(item.cases);
       });
-      chartData.splice(11, chartData.length);
+      chartData.splice(10, chartData.length);
       countryData.splice(10, countryData.length);
+      let numMillon = chartData.map((item, index) => {
+        return Number((item / 1000000).toFixed(2));
+      });
+      numMillon.unshift('總確診人數');
       let chart = c3.generate({
         bindto: '#totalChart',
         data: {
-          columns: [chartData],
+          columns: [numMillon],
           type: 'bar'
         },
         color: {
@@ -112,6 +143,7 @@ export default {
           bottom: 30
         },
         axis: {
+          rotated: true,
           x: {
             type: 'category',
             categories: countryData,
@@ -119,23 +151,38 @@ export default {
               left: 0,
               right: 0
             }
+          },
+          y: {
+            label: {
+              text: '(以百萬為單位)',
+              position: 'outer-middle'
+            },
+            tick: {
+              format: function(num) {
+                return num + 'M';
+              }
+            }
           }
         }
       });
     },
     renderTodayChart() {
-      let chartData = ['今日確診人數'];
+      let chartData = [];
       let countryData = [];
       this.sortTodayCases.forEach((item) => {
         countryData.push(item.country);
         chartData.push(item.todayCases);
       });
-      chartData.splice(11, chartData.length);
+      chartData.splice(10, chartData.length);
       countryData.splice(10, countryData.length);
+      let numThousands = chartData.map((item, index) => {
+        return Number((item / 1000).toFixed(2));
+      });
+      numThousands.unshift('今日確診人數');
       let chart = c3.generate({
         bindto: '#todayChart',
         data: {
-          columns: [chartData],
+          columns: [numThousands],
           type: 'bar'
         },
         color: {
@@ -145,12 +192,24 @@ export default {
           bottom: 30
         },
         axis: {
+          rotated: true,
           x: {
             type: 'category',
             categories: countryData,
             padding: {
               left: 0,
               right: 0
+            }
+          },
+          y: {
+            label: {
+              text: '(以千為單位)',
+              position: 'outer-middle'
+            },
+            tick: {
+              format: function(num) {
+                return num + 'K';
+              }
             }
           }
         }

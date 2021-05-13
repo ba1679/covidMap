@@ -24,18 +24,20 @@
               country.country
             }}</option>
           </select>
-          <div class="info mt-4 text-center" v-if="dataFilter">
-            <img class="flag" :src="dataFilter.countryInfo.flag" alt="國家國旗" />
+          <div class="info mt-4 text-center">
             <i class="fas fa-spinner fa-spin" v-if="dataLoading"></i>
-            <div class="h4" v-else-if="!dataFilter">請先選擇國家</div>
-            <div class="h4 mt-4">
-              今日確診人數: <br />
-              <strong class="text-danger">{{ dataFilter.todayCases | thousandsComma }}</strong
-              >人
-              <br />
-              Today Cases: <strong class="text-danger">{{ dataFilter.todayCases | thousandsComma }}</strong> <br />
-              <div class="h6 mt-3">最後更新時間 : <br />{{ timeString }}</div>
+            <div v-if="dataFilter">
+              <img class="flag" :src="dataFilter.countryInfo.flag" alt="國家國旗" />
+              <div class="h4 mt-4">
+                今日確診人數: <br />
+                <strong class="text-danger">{{ dataFilter.todayCases | thousandsComma }}</strong
+                >人
+                <br />
+                Today Cases: <strong class="text-danger">{{ dataFilter.todayCases | thousandsComma }}</strong> <br />
+                <div class="h6 mt-3">最後更新時間 : <br />{{ timeString }}</div>
+              </div>
             </div>
+            <div class="h4" v-else-if="!dataFilter">請先選擇國家</div>
           </div>
         </div>
         <div class="col-lg-9 p-0">
@@ -142,7 +144,8 @@ export default {
             累積死亡: ${item.deaths} 人<br>
 
           <small>更新時間: ${updateTime}</small>`
-          );
+          )
+          .openPopup();
       });
       // 亞洲定位在台灣，其他就定位在第一個國家
       if (continentData[0].continent !== 'Asia') {

@@ -10,7 +10,7 @@
       </div>
     </div>
     <router-view />
-    <a href="#" class="back-to-top d-none" @click.prevent="backToTop">
+    <a href="#" class="back-to-top fa-2x d-none" @click.prevent="backToTop">
       <i class="fas fa-arrow-circle-up fa-2x"></i>
     </a>
     <footer class="footer-bg py-2">
