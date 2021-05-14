@@ -52,6 +52,14 @@ import L from 'leaflet';
 import countryName from '../assets/countryName.json';
 
 let osmMap = {};
+const goldIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -45],
+  shadowSize: [41, 41]
+});
 export default {
   name: 'Map',
   data() {
@@ -121,7 +129,7 @@ export default {
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(osmMap);
-      L.marker([23.5, 121]).addTo(osmMap);
+      L.marker([23.5, 121], { icon: goldIcon }).addTo(osmMap);
     },
     updateMap() {
       let continentData;
@@ -131,7 +139,7 @@ export default {
       });
       continentData.forEach((item) => {
         let { lat, long } = item.countryInfo;
-        L.marker([lat, long])
+        L.marker([lat, long], { icon: goldIcon })
           .addTo(osmMap)
           .bindPopup(
             `
