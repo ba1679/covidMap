@@ -129,7 +129,7 @@ export default {
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(osmMap);
-      L.marker([23.5, 121], { icon: goldIcon }).addTo(osmMap);
+      L.marker([23.5, 121]).addTo(osmMap);
     },
     updateMap() {
       let continentData;
@@ -155,7 +155,7 @@ export default {
       });
       // 亞洲定位在台灣，其他就定位在第一個國家
       if (continentData[0].continent !== 'Asia') {
-        this.panTo(continentData[0].countryInfo.lat, continentData[0].countryInfo.long);
+        osmMap.panTo([continentData[0].countryInfo.lat, continentData[0].countryInfo.long]);
       } else {
         this.panTo(23.5, 121);
       }
@@ -185,14 +185,14 @@ export default {
         .addTo(osmMap)
         .bindPopup(
           `
-        <strong class="h6">${this.dataFilter.country}</strong>
-        <br>
-            今日新增病例: <strong>${this.dataFilter.todayCases}</strong>人 <br>
-            目前活躍病例: ${this.dataFilter.active} 人<br>
-            累積病例: ${this.dataFilter.cases}人<br>
-            累積死亡: ${this.dataFilter.deaths} 人<br>
-             <small>更新時間: ${this.timeString}</small>
-         `
+          <strong class="h6">${this.dataFilter.country}</strong>
+          <br>
+              今日新增病例: <strong>${this.dataFilter.todayCases}</strong>人 <br>
+              目前活躍病例: ${this.dataFilter.active} 人<br>
+              累積病例: ${this.dataFilter.cases}人<br>
+              累積死亡: ${this.dataFilter.deaths} 人<br>
+               <small>更新時間: ${this.timeString}</small>
+           `
         )
         .openPopup();
     }
