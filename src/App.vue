@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="sticky-footer">
     <div class="container-fluid">
       <div id="nav" class="d-flex align-items-center">
         <h1 class="mr-3 mobile-h1"><i class="fas fa-globe-americas text-info p-2"></i>全球疫情資訊</h1>
@@ -13,7 +13,7 @@
     <a href="#" class="back-to-top fa-2x d-none" @click.prevent="backToTop">
       <i class="fas fa-arrow-circle-up fa-2x"></i>
     </a>
-    <footer class="footer-bg py-2">
+    <footer class="footer-bg py-2 sticky-bottom">
       <div class="container text-center text-light">
         <p class="mb-0">資料來源: <a href="https://www.worldometers.info/coronavirus/">worldometers</a></p>
         <p>&copy; copyright 2021 By Hsin-Hui</p>
@@ -52,6 +52,14 @@ export default {
 
 body {
   position: relative;
+}
+.sticky-footer{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.sticky-bottom{
+  margin-top: auto;
 }
 .back-to-top {
   position: fixed;

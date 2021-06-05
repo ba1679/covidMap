@@ -9,9 +9,9 @@
             name="continent"
             v-model="select.continent"
             @change="
-              removeMarker();
-              updateMap();
-              select.country = '';
+              removeMarker()
+              updateMap()
+              select.country = ''
             "
           >
             <option v-for="continent in continentFilter" :value="continent" :key="continent">
@@ -48,10 +48,10 @@
   </div>
 </template>
 <script>
-import L from 'leaflet';
-import countryName from '../assets/countryName.json';
+import L from 'leaflet'
+import countryName from '../assets/countryName.json'
 
-let osmMap = {};
+let osmMap = {}
 const goldIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -59,7 +59,7 @@ const goldIcon = new L.Icon({
   iconAnchor: [12, 41],
   popupAnchor: [1, -45],
   shadowSize: [41, 41]
-});
+})
 export default {
   name: 'Map',
   data() {
@@ -71,74 +71,74 @@ export default {
       dataLoading: false,
       countryName,
       covidData: []
-    };
+    }
   },
   computed: {
     continentFilter() {
-      let continents = [];
+      let continents = []
       this.countryName.forEach((item) => {
-        continents.push(item.continent);
-      });
+        continents.push(item.continent)
+      })
       let continentsFilted = continents.filter((item, index, ary) => {
-        return ary.indexOf(item) === index;
-      });
-      return continentsFilted;
+        return ary.indexOf(item) === index
+      })
+      return continentsFilted
     },
     countryFilter() {
       let countriesFilted = this.countryName.filter((item) => {
-        return item.continent === this.select.continent;
-      });
-      return countriesFilted;
+        return item.continent === this.select.continent
+      })
+      return countriesFilted
     },
     dataFilter() {
-      let covidDataCountry;
+      let covidDataCountry
       covidDataCountry = this.covidData.filter((item) => {
-        return item.country === this.select.country;
-      });
-      return covidDataCountry[0];
+        return item.country === this.select.country
+      })
+      return covidDataCountry[0]
     },
     timeString() {
-      return new Date(this.dataFilter.updated).toLocaleString();
+      return new Date(this.dataFilter.updated).toLocaleString()
     }
   },
   methods: {
     getCountryData() {
-      const vm = this;
-      const url = 'https://corona.lmao.ninja/v3/covid-19/countries';
-      vm.dataLoading = true;
+      const vm = this
+      const url = 'https://corona.lmao.ninja/v3/covid-19/countries'
+      vm.dataLoading = true
       this.$http
         .get(url)
         .then((res) => {
           if (res.status === 200) {
-            vm.covidData = res.data;
-            vm.updateMap();
-            vm.dataLoading = false;
+            vm.covidData = res.data
+            vm.updateMap()
+            vm.dataLoading = false
           }
         })
         .catch((err) => {
-          vm.covidData = [];
-          console.log(err);
-        });
+          vm.covidData = []
+          console.log(err)
+        })
     },
     renderMap() {
       // 初始化地圖，定位在台灣
       osmMap = L.map('map', {
         center: [23.5, 121],
         zoom: 6
-      });
+      })
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(osmMap);
-      L.marker([23.5, 121]).addTo(osmMap);
+      }).addTo(osmMap)
+      L.marker([23.5, 121]).addTo(osmMap)
     },
     updateMap() {
-      let continentData;
+      let continentData
       continentData = this.covidData.filter((item) => {
-        let continentModify = item.continent.split('/').pop();
-        return continentModify === this.select.continent;
-      });
+        let continentModify = item.continent.split('/').pop()
+        return continentModify === this.select.continent
+      })
       continentData.forEach((item) => {
-        let { lat, long } = item.countryInfo;
+        let { lat, long } = item.countryInfo
         L.marker([lat, long], { icon: goldIcon })
           .addTo(osmMap)
           .bindPopup(
@@ -151,21 +151,21 @@ export default {
             累積死亡: ${item.deaths} 人<br>
 
           <small>更新時間: ${this.timeString}</small>`
-          );
-      });
+          )
+      })
       // 亞洲定位在台灣，其他就定位在第一個國家
       if (continentData[0].continent !== 'Asia') {
-        osmMap.panTo([continentData[0].countryInfo.lat, continentData[0].countryInfo.long]);
+        osmMap.panTo([continentData[0].countryInfo.lat, continentData[0].countryInfo.long])
       } else {
-        this.panTo(23.5, 121);
+        this.panTo(23.5, 121)
       }
     },
     updateCountryMap() {
       if (this.dataFilter) {
-        let { lat, long } = this.dataFilter.countryInfo;
-        this.panTo(lat, long);
+        let { lat, long } = this.dataFilter.countryInfo
+        this.panTo(lat, long)
       } else {
-        alert('無此國家資料');
+        alert('無此國家資料')
       }
     },
     //移動到下個區域時，先清掉原有的marker
@@ -174,13 +174,13 @@ export default {
       osmMap.eachLayer((layer) => {
         // instanceof用來檢查某個值是否為某 class 的實例物件或建構函式
         if (layer instanceof L.Marker) {
-          osmMap.removeLayer(layer);
+          osmMap.removeLayer(layer)
         }
-      });
+      })
     },
     // 重新定位地圖
     panTo(lat, long) {
-      osmMap.panTo([lat, long]);
+      osmMap.panTo([lat, long])
       L.marker([lat, long])
         .addTo(osmMap)
         .bindPopup(
@@ -194,14 +194,14 @@ export default {
                <small>更新時間: ${this.timeString}</small>
            `
         )
-        .openPopup();
+        .openPopup()
     }
   },
   mounted() {
-    this.renderMap();
-    this.getCountryData();
+    this.renderMap()
+    this.getCountryData()
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .flag {

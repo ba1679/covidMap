@@ -1,7 +1,7 @@
 <template>
   <div>
     <loading :active.sync="isLoading"></loading>
-    <section class="container">
+    <section class="container-fluid">
       <div class="globalStatus">
         <div class="h3">
           全球疫情概況 :
@@ -70,66 +70,66 @@ export default {
       isLoading: false,
       globalStatus: {},
       allCountries: []
-    };
+    }
   },
   computed: {
     timeString() {
-      const updatedTime = new Date(this.globalStatus.updated);
-      return updatedTime.toLocaleString();
+      const updatedTime = new Date(this.globalStatus.updated)
+      return updatedTime.toLocaleString()
     },
     sortTotalCases() {
       return this.allCountries.sort((a, b) => {
-        return b.cases - a.cases;
-      });
+        return b.cases - a.cases
+      })
     },
     sortTodayCases() {
       return this.allCountries.sort((a, b) => {
-        return b.todayCases - a.todayCases;
-      });
+        return b.todayCases - a.todayCases
+      })
     }
   },
   methods: {
     getAllStatus() {
-      const vm = this;
-      const url = 'https://corona.lmao.ninja/v3/covid-19/all';
+      const vm = this
+      const url = 'https://corona.lmao.ninja/v3/covid-19/all'
       this.$http
         .get(url)
         .then((res) => {
-          vm.globalStatus = res.data;
+          vm.globalStatus = res.data
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     getAllCountries() {
-      const vm = this;
-      vm.isLoading = true;
-      const url = 'https://corona.lmao.ninja/v3/covid-19/countries';
+      const vm = this
+      vm.isLoading = true
+      const url = 'https://corona.lmao.ninja/v3/covid-19/countries'
       this.$http
         .get(url)
         .then((res) => {
-          vm.allCountries = res.data;
-          this.renderTotalChart();
-          this.renderTodayChart();
-          vm.isLoading = false;
+          vm.allCountries = res.data
+          this.renderTotalChart()
+          this.renderTodayChart()
+          vm.isLoading = false
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     renderTotalChart() {
-      let chartData = [];
-      let countryData = [];
+      let chartData = []
+      let countryData = []
       this.sortTotalCases.forEach((item) => {
-        countryData.push(item.country);
-        chartData.push(item.cases);
-      });
-      chartData.splice(10, chartData.length);
-      countryData.splice(10, countryData.length);
+        countryData.push(item.country)
+        chartData.push(item.cases)
+      })
+      chartData.splice(10, chartData.length)
+      countryData.splice(10, countryData.length)
       let numMillon = chartData.map((item, index) => {
-        return Number((item / 1000000).toFixed(2));
-      });
-      numMillon.unshift('總確診人數');
+        return Number((item / 1000000).toFixed(2))
+      })
+      numMillon.unshift('總確診人數')
       let chart = c3.generate({
         bindto: '#totalChart',
         data: {
@@ -159,26 +159,26 @@ export default {
             },
             tick: {
               format: function(num) {
-                return num + 'M';
+                return num + 'M'
               }
             }
           }
         }
-      });
+      })
     },
     renderTodayChart() {
-      let chartData = [];
-      let countryData = [];
+      let chartData = []
+      let countryData = []
       this.sortTodayCases.forEach((item) => {
-        countryData.push(item.country);
-        chartData.push(item.todayCases);
-      });
-      chartData.splice(10, chartData.length);
-      countryData.splice(10, countryData.length);
+        countryData.push(item.country)
+        chartData.push(item.todayCases)
+      })
+      chartData.splice(10, chartData.length)
+      countryData.splice(10, countryData.length)
       let numThousands = chartData.map((item, index) => {
-        return Number((item / 1000).toFixed(2));
-      });
-      numThousands.unshift('今日確診人數');
+        return Number((item / 1000).toFixed(2))
+      })
+      numThousands.unshift('今日確診人數')
       let chart = c3.generate({
         bindto: '#todayChart',
         data: {
@@ -208,17 +208,17 @@ export default {
             },
             tick: {
               format: function(num) {
-                return num + 'K';
+                return num + 'K'
               }
             }
           }
         }
-      });
+      })
     }
   },
   mounted() {
-    this.getAllStatus();
-    this.getAllCountries();
+    this.getAllStatus()
+    this.getAllCountries()
   }
-};
+}
 </script>
